@@ -102,13 +102,15 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    var arr = [];
-    _.each(array, function(element) {
-      if (!arr.includes(element)) {
-        arr.push(element);
+    var uniqArr = [];
+    var iteratedArr = iterator ? array.map(iterator) : array; 
+    _.each(iteratedArr, function (element, index) {
+      var isUnique = isSorted ? (element !== iteratedArr[index - 1]) : (!iteratedArr.slice(0, index).includes(element));
+      if (isUnique) {
+        uniqArr.push(array[index]);
       }
     });
-    return arr;
+    return uniqArr;
   };
 
 

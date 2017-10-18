@@ -345,6 +345,8 @@
       it('should handle iterators that work with a sorted array', function() {
         var iterator = function(value) { return value === 1; };
         var numbers = [1, 2, 2, 3, 4, 4];
+        //after transform from function: [true, false, false, false, false, false] (iteratedArr)
+        //goes through uniq to become [true, false] but returns corresponding values [1, 2]
 
         expect(_.uniq(numbers, true, iterator)).to.eql([1, 2]);
       });
