@@ -208,7 +208,11 @@
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
     return _.reduce(collection, function(accumulator, element, index) {
-      return (accumulator && iterator(element, index));
+      if (iterator) {
+        return (Boolean(iterator(element, index)) && accumulator);
+      } else {
+        return (Boolean(element)) && accumulator;
+      }
     }, true);
   };
 
