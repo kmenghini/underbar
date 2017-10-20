@@ -220,6 +220,13 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (!iterator) {
+      iterator = function(element) {return element;}
+    }
+    return _.reduce(collection, function(accumulator, element, index) {
+      return (Boolean(iterator(element, index)) || accumulator);
+    }, false);
+    
   };
 
 
