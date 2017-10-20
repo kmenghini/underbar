@@ -169,15 +169,24 @@
   _.reduce = function(collection, iterator, accumulator) {
     var total;
     var testArr;
-    if (accumulator || accumulator === 0) {
+    if (accumulator === undefined) {
+      if (Array.isArray(collection)) {
+        total = collection[0];
+        testArr = collection.slice(1);
+      } else {
+        var properties = Object.keys(collection);
+        for (var key in collection) {
+          testArr[key] = collection[key];
+        }
+        total = testArr[properties[0]];
+        delete testArr[properties[0]];
+      } 
+    } else {
       total = accumulator;
       testArr = collection;
-    } else {
-      total = collection[0];
-      testArr = collection.slice(1);
     }
-    _.each(testArr, function (element) {
-      total = iterator(total, element);
+    _.each(testArr, function (element, index) {
+      total = iterator(total, element, index);
     });
     return total;
   };
@@ -191,13 +200,16 @@
         return true;
       }
       return item === target;
-    }, false);
+      }, false);
   };
 
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    return _.reduce(collection, function(accumulator, element, index) {
+      return (accumulator && iterator(element, index));
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
