@@ -287,7 +287,6 @@
     // time it's called.
     var alreadyCalled = false;
     var result;
-
     // TIP: We'll return a new function that delegates to the old one, but only
     // if it hasn't been called before.
     return function() {
@@ -310,7 +309,46 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+
+  
   _.memoize = function(func) {
+    //store as [{args:  , result:  }, {args:  , result:  }, {args:  , result:  }]
+    var storageArr = [];
+    var i;
+    //function to check if arrays are equal by element - returns boolean
+    //already verified on its own in replit
+    var areArraysEqual = function(a, b) {
+      return _.reduce(a, function(bool, element, index) {
+        return (element === b[index]) && bool;
+      }, true);
+     };
+
+
+    //loop through prev runs of function to check where 'arguments' appears
+    _.each(storageArr, function(element, index) {
+      // if args of this element is equal to the arguments array that we have
+      if (areArraysEqual(element.args, arguments)) {
+        i = index;
+      }
+      //return the placement in storageArr that we should look into for the result
+      return i;
+    });
+    //if those args are already in our storageArr
+    if (i !== undefined) {
+      //return the result at that index
+      return storageArr[i].result;
+    //if those args are not in our storageArr yet  
+    } else {
+      //calculate the result using the new arguments
+      var newResult = func.apply(this, arguments);
+      //create new obj with arguments and the calculated result
+      storageArr.push({
+        args: arguments,
+        result: newResult
+      });
+      //return the calculated result
+      return newResult;
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -320,6 +358,12 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    //remove func and time from list of args
+    var args = Array.prototype.slice.call(arguments, 2);
+   window.setTimeout(func.apply(this,args), wait);
+   //args needs to be list of strings, not an array as we have here
+   //c.apply(this,a):eval(c)
+    //window.setTimeout(func, wait, args)
   };
 
 
@@ -334,6 +378,7 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var copy = array.slice(0);
   };
 
 
