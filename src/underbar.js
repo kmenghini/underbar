@@ -365,8 +365,18 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+  // Using the Fisher–Yates shuffle
   _.shuffle = function(array) {
     var copy = array.slice();
+    var randomNum = 0;
+    var temp;
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      temp = copy[i];
+      copy[i] = copy[randomNum];
+      copy[randomNum] = temp;
+    }
+    return copy;
   };
 
 
